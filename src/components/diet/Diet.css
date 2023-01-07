@@ -180,6 +180,7 @@
   .custom_diet_items {
     display: flex;
     flex-direction: column;
+    justify-content: center
   }
   .meal_name_input {
     width: 350px
