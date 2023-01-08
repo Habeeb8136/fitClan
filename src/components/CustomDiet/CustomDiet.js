@@ -7,15 +7,17 @@ import foodData from '../../foodData.json'
 import { BsSearch } from "react-icons/bs";
 import { HiOutlineTrash } from 'react-icons/hi'
 import { Button } from '@mui/material';
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
-export default function CustomDiet({ id, title }) {
+
+export default function CustomDiet({ id, title, time }) {
 
   const [foodItems, setFoodItems] = useState([]);
   const [searchedData, setsearchedData] = useState([]);
   const [wordEntered, setWordEntered] = useState("");
-  const [foodId, setFoodId] = useState();
   const { user } = UserAuth();
 
+  // handleSearch function to handle the searched food item
   const handleSearch = (e) => {
     const searchedWord = e.target.value.toLowerCase();
     setWordEntered(searchedWord);
@@ -25,12 +27,12 @@ export default function CustomDiet({ id, title }) {
     searchedWord === "" ? setsearchedData([]) : setsearchedData(filteredData);
   };
 
-
+  // adding new food item to the meal & database
   const additem = async (item) => {
 
     if (item) {
       const mealColRef = collection(db, "user", user.uid, 'meals', id, `${title}`);
-      const docSnap = await addDoc(mealColRef, {
+      await addDoc(mealColRef, {
         title: item.title,
         carbs: item.carbs,
         protein: item.proteins,
@@ -38,7 +40,6 @@ export default function CustomDiet({ id, title }) {
         calory: item.calories,
         timestamp: serverTimestamp()
       })
-      setFoodId(docSnap.id);
       setsearchedData([]);
       setWordEntered("");
     }
@@ -54,21 +55,43 @@ export default function CustomDiet({ id, title }) {
     await deleteDoc(doc(db, "user", user.uid, 'meals', id, `${title}`, foodId))
   }
 
-  const colRef = collection(db, "user", user.uid, 'meals', id, `${title}`);
-
+  // fetching the food items in a meal 
   useEffect(() => {
-    const q = query(colRef);
+    const colRef = collection(db, "user", user.uid, 'meals', id, `${title}`);
+    const q = query(colRef, orderBy("timestamp"));
     onSnapshot(q, (snapshot) => {
       setFoodItems(snapshot.docs.map((doc) =>
-        doc.data(), orderBy("timestamp")))
+      ({
+        ...doc.data(),
+        id: doc.id,
+        name: doc.data().title,
+        carbs: doc.data().carbs,
+        protein: doc.data().protein,
+        fat: doc.data().fat,
+        calory: doc.data().calory
+      })
+      ))
     });
     // eslint-disable-next-line 
   }, []);
 
+  function handleOnDragEnd(result) {
+    if (!result.destination) return;
+
+    const items = Array.from(foodItems);
+    const [reorderedItem] = items.splice(result.source.index, 1);
+    items.splice(result.destination.index, 0, reorderedItem);
+
+    setFoodItems(items);
+  }
+
   return (
-    <div className='custom_diet'>
+    <DragDropContext onDragEnd={handleOnDragEnd}>
+    <Droppable droppableId="custom_diet">
+            {(provided) => (
+    <div className='custom_diet' {...provided.droppableProps} ref={provided.innerRef}>
       <div className="title_n_trash">
-        <h6>{title}</h6>  <Button type="submit" onClick={() => deleteMeal(id)} variant="outlined" color="error">Delete Meal &nbsp;<HiOutlineTrash className='trash' /></Button>
+        <h6>{title}</h6> <span>{time}</span> <Button type="submit" onClick={() => deleteMeal(id)} variant="outlined" color="error">Delete Meal &nbsp;<HiOutlineTrash className='trash' /></Button>
       </div>
 
       {/* food item search bar */}
@@ -99,17 +122,33 @@ export default function CustomDiet({ id, title }) {
 
       </div>
 
-      {
-        foodItems?.map(({ title, carbs, proteins, fat, calories }) => (
-          <div key={title} className="food_list_item">
-            <div className='food_title'>{title} <button onClick={() => deleteFoodItem(foodId)} ><HiOutlineTrash className='trash' /></button></div>
-            <div className="macros">
-              Carbs: {carbs}g, Prot: {proteins}g, Fat: {fat}g, Cal: {calories}kCal
+      {foodItems?.map((food , index) => (
+        <Draggable key={food.id} draggableId={food.id} index={index}>
+            {(provided) => (
+              <div key={food.id} className="food_list_item" ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
+            <div className='food_title'>{food.name}
+              <Button type="submit" onClick={() => deleteFoodItem(food.id)} variant="outlined" color="error">
+                <HiOutlineTrash className='trash' />
+              </Button>
             </div>
-          </div>
+            <div className="macros">
+              <span>Carbs: {food.carbs}g, </span>
+              <span>Prot: {food.protein}g, </span>
+              <span>Fat: {food.fat}g, </span>
+              <span>Cal: {food.calory}kCal</span>
+            </div>
+              </div>
+              )}
+        </Draggable>
+
+
         ))
       }
+      {provided.placeholder}
 
     </div >
-  )
+    )}
+    </Droppable>
+    </DragDropContext>
+  );
 }
