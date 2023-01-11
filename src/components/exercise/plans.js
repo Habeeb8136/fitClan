@@ -1,11 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './plans.css';
 
-export default function plans() {
+export default function plans({title,bg,pdf,details,catagory}) {
+  
+  
+
   return (
-    <div className='exercise__plans'>
-        <h3>Plan Title</h3>
-        <p>Plan Details</p>
+  <div className='exercise__plans' style={{backgroundImage:{bg}}}>
+        <p>{title}</p>
+        <p>{details}</p>
+        <p>{catagory}</p>
+        <a href={pdf}>download plan</a>
     </div>
   )
 }
