@@ -1,6 +1,6 @@
-.custom_diet {
-  background-color: rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(5px);
+.dietGroup {
+  background-color: rgba(0, 0, 0, 0.7);
+  
   border-radius: 0.5rem;
   padding: 1rem;
   width: 330px;
@@ -40,16 +40,16 @@
 
 .searchresults {
   position: absolute;
+  right: 10px;
   background-color: black;
-  top: 106px;
+  margin: auto;
   max-height: 290px;
   overflow: hidden;
   overflow-y: auto;
   opacity: 0.94;
-  left: 10px;
-  
   border-radius: 0.5rem;
   box-shadow:  2px 2px 5px rgb(33, 33, 33);
+  z-index: 1;
 }
 
 

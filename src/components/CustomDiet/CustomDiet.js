@@ -24,6 +24,7 @@ export default function CustomDiet({ id, title, time }) {
     const filteredData = foodData.filter((value) => {
       return value.title.includes(searchedWord);
     });
+    console.log('serched data',searchedData)
     searchedWord === "" ? setsearchedData([]) : setsearchedData(filteredData);
   };
 
@@ -75,7 +76,7 @@ export default function CustomDiet({ id, title, time }) {
     // eslint-disable-next-line 
   }, []);
 
-  function handleOnDragEnd(result) {
+  function handleItemDragEnd(result) {
     if (!result.destination) return;
 
     const items = Array.from(foodItems);
@@ -86,10 +87,10 @@ export default function CustomDiet({ id, title, time }) {
   }
 
   return (
-    <DragDropContext onDragEnd={handleOnDragEnd}>
-    <Droppable droppableId="custom_diet">
+    <DragDropContext onDragEnd={handleItemDragEnd}>
+    <Droppable droppableId="dietGroup">
             {(provided) => (
-    <div className='custom_diet' {...provided.droppableProps} ref={provided.innerRef}>
+    <div className='dietGroup' {...provided.droppableProps} ref={provided.innerRef}>
       <div className="title_n_trash">
         <h6>{title}</h6> <span>{time}</span> <Button type="submit" onClick={() => deleteMeal(id)} variant="outlined" color="error">Delete Meal &nbsp;<HiOutlineTrash className='trash' /></Button>
       </div>
@@ -122,10 +123,11 @@ export default function CustomDiet({ id, title, time }) {
 
       </div>
 
-      {foodItems?.map((food , index) => (
+      {foodItems?.map((food , index) =>{
+        return(
         <Draggable key={food.id} draggableId={food.id} index={index}>
             {(provided) => (
-              <div key={food.id} className="food_list_item" ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
+              <div className="food_list_item" ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
             <div className='food_title'>{food.name}
               <Button type="submit" onClick={() => deleteFoodItem(food.id)} variant="outlined" color="error">
                 <HiOutlineTrash className='trash' />
@@ -140,13 +142,11 @@ export default function CustomDiet({ id, title, time }) {
               </div>
               )}
         </Draggable>
+        );
 
-
-        ))
-      }
+      })}
       {provided.placeholder}
-
-    </div >
+      </div >
     )}
     </Droppable>
     </DragDropContext>
