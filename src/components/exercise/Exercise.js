@@ -18,7 +18,7 @@ export default function Exercise() {
   const [exerciseData, setExerciseData] = useState([]);
   const [searchedData, setsearchedData] = useState([]);
   const [wordEntered, setWordEntered] = useState('');
-  
+  const [bodyData, setBodyData] = useState(data);
   
   useEffect(() => {
     const options = {
@@ -60,11 +60,8 @@ export default function Exercise() {
              || item.bodyPart.includes(wordEntered));
 
              setsearchedData(filteredData);
-             
-
-      
-    console.log('searchedword',wordEntered)
-  };
+             console.log('searchedword',wordEntered)
+    };
   
   return (
     <div className='exercise'>
@@ -91,7 +88,7 @@ export default function Exercise() {
 
       <div className='choose-target'>
       <Model  
-        data={data}
+        data={bodyData}
         style={{ width:'40%',padding: '1rem' }}
         highlightedColors={["#ff0000", "#0000ff"]}
         onClick={handleClick}
@@ -99,7 +96,7 @@ export default function Exercise() {
         <Model
           type="posterior"
           style={{width:'40%', padding: '1rem' }}
-          data={data}
+          data={bodyData}
           highlightedColors={["#ff0000", "#db2f2f"]}
           onClick={handleClick}
         />
