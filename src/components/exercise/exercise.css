@@ -1,47 +1,186 @@
 .exercise {
   display: flex;
+  flex-direction: column;
   justify-content: center;
-  flex-wrap: wrap;
-  font-size: 2rem;
-  padding: 1rem 0.5rem;
+  align-items: center;
   color: white;
-  box-shadow: inset 0 0 10px #000000;
-  padding-inline: 50px;
+  padding: 2rem;
 }
-.exercise_plans{
+
+.exercise_outer {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  margin: 1rem auto;
+  gap: 2rem;
+}
+
+.exercise_plans {
+  width: 380px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(5px);
+  border-radius: 0.5rem;
+}
+
+.exercise_plans > img {
+  width: 100%;
+  border-radius: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+
+.exercise_plans_container {
+  padding: 0.5rem 1.5rem;
+}
+
+.exercise > h3,
+.exercise_plans_container > h3 {
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  backdrop-filter: blur(4px);
+  font-size: 1.2rem;
+  text-transform: capitalize;
+}
+
+.exercise_plans_container > h3 {
+  padding: 0.5rem;
+  background-color: #000000;
+}
+
+.exercise_plans_container > h3 > small {
+  color: gray;
+  text-transform: capitalize;
+  font-size: 0.8rem;
+}
+
+.exercise > h3 {
+  width: fit-content;
+  font-size: 2rem;
+  padding: 0.5rem 2rem;
+}
+
+.goal_plan{
+  text-align: justify;
+  text-justify: inter-word;
+}
+
+.searchbar-exercises {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: left;
+  border-radius: 0.5rem;
+  width: 540px;
+  margin: auto;
+}
+
+.searchinput-exercise {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.input-exercise {
+  background: transparent;
+  border: none;
+  width: 100%;
+  outline: none;
+  color: white;
+  border-bottom: 1px solid gray;
+}
+
+.input-exercise::placeholder {
+  font-size: 0.8rem;
+}
+.suggested-results{
+  width: auto;
+  max-height: 200px;
+  overflow: hidden;
+  overflow-y: auto;
+  position: absolute;
+  padding: 0;
+}
+.suggested-item{
+  display: flex;
+  padding : 0.8rem 0.5rem;
+  justify-content: space-between;
+  background-color: black;
+  border-bottom: 0.5px solid rgba(255, 255, 255, 0.216);
+}
+.item-right{
+  gap: 0.3rem;
+  font-size: small;
+  display: flex;
+  float: right;
+}
+
+/* ========== For Medium Devices ========== */
+@media screen and (max-width: 1024px) {
+  .exercise {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    text-align: center;
+  }
+  .exercise_plans {
+    padding: 1rem;
+  }
+}
+
+/* ========== For Small Devices ========== */
+@media screen and (max-width: 600px) {
+  .exercise {
+    padding: 1rem 0.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+  .exercise > h3 {
+    width: 95%;
+    font-size: 1.5rem;
+  }
+  .exercise_outer{
     width: 100%;
+    margin: 0;
+    padding: 0;
+    gap: 1rem;
+  }
+  .exercise_plans{
+    width: 95%;
+    padding: 1rem;
+  }
+  .searchbar-exercises{
+    width: 90%;
+  }
 }
-.exercise > h3,
-.exercise_plans > h3 {
-  background-color: rgba(0, 0, 0, 0.5);
-  width: max-content;
-  padding: 0.5rem 1rem;
+/* width */
+.suggested-results::-webkit-scrollbar {
+  width: 0.5rem;
+}
+
+/* Track */
+.suggested-results::-webkit-scrollbar-track {
   border-radius: 0.5rem;
-  backdrop-filter: blur(4px);
-}
-.exercise_plans_container,
-.goal_plan {
-  display: flex;
-  width: 100%;
-  justify-content: space-evenly;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 1rem;
+  background: #000000;
 }
 
-.choose-target{
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  width: 100%;
-  height: 500px;
-  margin-block: 100px;
-}
-.searchbar{
-  margin: auto;
+/* Handle */
+.suggested-results::-webkit-scrollbar-thumb {
+  background: rgb(61, 61, 61);
+  border-radius: 0.5rem;
 }
 
+/* Handle on hover */
+.suggested-results::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
